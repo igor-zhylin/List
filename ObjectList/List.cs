@@ -88,5 +88,23 @@ namespace ObjectList
             _array[index] = element;
             Length++;
         }
+
+        public void Remove(int index)
+        {
+            if (index > Length)
+            {
+                throw new IndexOutOfRangeException("Element does not exist!");
+            }
+            RemoveElement(index);
+        }
+
+        private void RemoveElement(int index)
+        {
+            for (int i = index; i < Length; i++)
+            {
+                _array[i] = _array[i + 1];
+            }
+            Length--;
+        }
     }
 }

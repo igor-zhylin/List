@@ -13,6 +13,7 @@
                 list.Add(i + 1);
             }
             list.Insert(2, 4);
+            list.Remove(0);
 
             for (int i = 0; i < list.Length; i++)
             {
