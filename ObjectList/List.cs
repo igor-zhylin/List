@@ -4,6 +4,7 @@
 namespace ObjectList
 {
     using System;
+    using System.Data;
 
     public class List
     {
@@ -20,7 +21,12 @@ namespace ObjectList
 
         public object this[int index]
         {
-            get { return _array[index]; }
+            get { return _array[CheckIndex(index)]; }
+        }
+
+        private int CheckIndex(int index)
+        {
+            return index <= Length ? index : throw new IndexOutOfRangeException();
         }
 
         public void Add(object objectToAdd)
@@ -32,7 +38,7 @@ namespace ObjectList
             }
             else
             {
-                ResizeErray();
+                ResizeArray();
                 AddElement(objectToAdd);
             }
         }
@@ -58,7 +64,7 @@ namespace ObjectList
             }
         }
 
-        private void ResizeErray()
+        private void ResizeArray()
         {
             var resizedArray = new object[Length * ArrayLengthMultiplier];
             for (int i = 0; i < _array.Length; i++)
@@ -68,13 +74,12 @@ namespace ObjectList
             _array = resizedArray;
         }
 
-        public void Insert(int index, object objectToInsert)
+        public void InsertAt(int index, object objectToInsert)
         {
             CheckObjectZeroValues(objectToInsert);
             if (Length == _array.Length)
             {
-                ResizeErray();
-                InsertElement(index, objectToInsert);
+                ResizeArray();
             }
             InsertElement(index, objectToInsert);
         }
@@ -89,7 +94,7 @@ namespace ObjectList
             Length++;
         }
 
-        public void Remove(int index)
+        public void RemoveAt(int index)
         {
             if (index > Length)
             {
@@ -105,6 +110,41 @@ namespace ObjectList
                 _array[i] = _array[i + 1];
             }
             Length--;
+        }
+
+        public int IndexOf(object item)
+        {
+            int index = SearchIndex(item);
+            return index == -1 ? throw new ArgumentNullException("Item Not Found") : index;
+        }
+
+        private int SearchIndex(object item)
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                if (_array[i].Equals(item))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public void Reverse()
+        {
+            for (int i = 0; i < Length / 2; i++)
+            {
+                object tmp = _array[i];
+
+                _array[i] = _array[Length - i - 1];
+                _array[Length - i - 1] = tmp;
+            }
+        }
+
+        public void Clear()
+        {
+            _array = null;
+            Length = 0;
         }
     }
 }
